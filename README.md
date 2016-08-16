@@ -1,5 +1,9 @@
 # SeymourSolo
-This repo contains modifications to the 3DR Solo python scripts that Southern Miss uses on their Solos. 
+This repo contains modifications to the 3DR Solo python scripts that Southern Miss uses on their Solos.  Presently this only includes a relay controller used to take pictures with a mounted Qx1.  
+
+Here is a link to relay module I am using:
+
+http://numato.com/1-channel-usb-powered-relay-module/
 
 
 This is a youtube link to a demo of the relay controlling the Qx1:
