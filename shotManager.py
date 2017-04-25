@@ -232,6 +232,7 @@ class ShotManager():
         elif (self.vehicle.armed is False or self.vehicle.system_status == 'STANDBY') and shot not in shots.CAN_START_BEFORE_ARMING:
 
             logger.log('[shot]: Vehicle is unarmed, shot entry into %s disallowed.' % shots.SHOT_NAMES[shot])
+            self.vehicle.mode = VehicleMode("LOITER")
 
             # set shot to APP_SHOT_NONE
             shot = shots.APP_SHOT_NONE
@@ -312,7 +313,7 @@ class ShotManager():
                 self.lastMode = mode.name
 
                 # don't do the following for guided, since we're in a shot
-                if self.lastMode == 'GUIDED':
+                if self.lastMode == 'GUIDED' or mode.name == 'RTL':
                     return
 
                 modeIndex = modes.getAPMModeIndexFromName( self.lastMode, self.vehicle)
@@ -470,7 +471,11 @@ class ShotManager():
             # no GPS - force an emergency land
             self.vehicle.mode = VehicleMode("LAND")
             return
-
+        
+        # ignore FS while in Auto mode
+        if self.vehicle.mode.name == 'AUTO' and self.rewindManager.fs_thr == 2:
+            return
+    
         if self.rewindManager.enabled:
             self.enterShot(shots.APP_SHOT_REWIND)
             self.curController.exitToRTL = True
